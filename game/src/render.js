@@ -357,7 +357,13 @@ function drawWorld(ctx) {
   // Hand at the cursor.
   if (G.hand && G.mouse) {
     drawIngredient(ctx, G.mouse.x, G.mouse.y - 26, 22, G.hand.id, G.hand.chopped);
-    text(ctx, INGREDIENTS[G.hand.id].name, G.mouse.x, G.mouse.y - 52, 13, '#fff', 'center');
+    // Dark pill behind the hand label so it stays readable over light plates.
+    const label = INGREDIENTS[G.hand.id].name;
+    ctx.font = 'bold 13px system-ui, sans-serif';
+    const w = ctx.measureText(label).width;
+    ctx.fillStyle = 'rgba(20,10,4,0.75)';
+    rr(ctx, G.mouse.x - w / 2 - 6, G.mouse.y - 62, w + 12, 20, 10); ctx.fill();
+    text(ctx, label, G.mouse.x, G.mouse.y - 52, 13, '#fff', 'center');
   }
 }
 

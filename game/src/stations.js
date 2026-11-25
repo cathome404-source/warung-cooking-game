@@ -129,21 +129,21 @@ function clickWok() {
 
 function updateWok(order, dt) {
   const wok = order.wok;
-  if (!wok.cooking || wok.ready || wok.burnt) return;
+  if (!wok.cooking || wok.burnt) return;
   wok.progress += dt;
-  if (wok.progress >= wok.duration) {
-    wok.ready = true;
-    wok.cooking = false;
-    AudioSys.sizzleStop();
-    AudioSys.bell();
-  } else if (wok.progress > wok.duration + 4) {
-    // Burnt: left in the wok past its window.
+  if (wok.progress >= wok.duration + 4) {
+    // Burnt: left in the wok past its window (4 s after it was ready).
     wok.burnt = true;
     wok.cooking = false;
+    wok.ready = false;
     AudioSys.sizzleStop();
     AudioSys.thud();
     breakCombo();
     addSmoke(640, 340);
+  } else if (wok.progress >= wok.duration && !wok.ready) {
+    wok.ready = true;
+    AudioSys.sizzleStop();
+    AudioSys.bell();
   }
 }
 
